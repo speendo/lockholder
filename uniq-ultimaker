@@ -1,0 +1,52 @@
+[profile]
+filament_diameter = 2.89
+layer_height = 0.2
+wall_thickness = 0.8
+retraction_enable = False
+solid_layer_thickness = 0.6
+fill_density = 20
+print_speed = 120
+print_temperature = 200
+support = None
+enable_raft = False
+filament_density = 0.8
+nozzle_size = 0.4
+skirt_line_count = 1
+skirt_gap = 3.0
+retraction_min_travel = 5.0
+retraction_speed = 40.0
+retraction_amount = 4.5
+retraction_extra = 0.0
+travel_speed = 150
+max_z_speed = 3.0
+bottom_layer_speed = 100
+cool_min_layer_time = 5
+fan_enabled = True
+bottom_thickness = 0.3
+object_sink = 0.0
+enable_skin = False
+plugin_config = 
+model_matrix = 1.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0
+
+[alterations]
+start.gcode = ;Sliced {filename} at: {day} {date} {time}
+	;Basic settings: Layer height: {layer_height} Walls: {wall_thickness} Fill: {fill_density}
+	;Print time: {print_time}
+	;Filament used: {filament_amount}m {filament_weight}g
+	;Filament cost: {filament_cost}
+	G21        ;metric values
+	G90        ;absolute positioning
+	M107       ;start with the fan off
+	
+	G28 X0 Y0  ;move X/Y to min endstops
+	G28 Z0     ;move Z to min endstops
+	
+	G1 Z15.0 F{max_z_speed} ;move the platform down 15mm
+	
+	G92 E0                  ;zero the extruded length
+	G1 F200 E3              ;extrude 3mm of feed stock
+	G92 E0                  ;zero the extruded length again
+	G1 F{travel_speed}
+	M117 Printing...
+	
+
