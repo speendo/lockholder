@@ -4,7 +4,7 @@ $fn=200;
 // Imports
 include <lockholder.scad>;
 
-bottomPart
+lockHolderSet
 (
 	diameterTopTube = 31.75+0.5,
 // Diameter of your bike's top tube (or any other tube on which you want to mount the lockholder)

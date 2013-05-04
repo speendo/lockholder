@@ -94,15 +94,38 @@ module bottomPart
 	screwBarWidth = nutSizeOuter + (thickness / 2);
 
 	translate(v = [0, lengthTopTube / 2, 0]) {
-		bottomPart1(lengthTopTube, diameterTopTube, lengthLock, diameterLock, screwBarWidth, nutSizeOuter, nutSizeInner, thickness, offset, screwOffsetShare);
-		translate(v = [0, (-1) * (nutSizeOuter + (thickness / 2)), 0]) {
-			doubleStabilityBracing(diameterTopTube, screwBarWidth, thickness, offset);
-		}
-		translate(v = [0, (-1) * (lengthTopTube - (nutSizeOuter + (1.5 * thickness))), 0]) {
-			doubleStabilityBracing(diameterTopTube, screwBarWidth, thickness, offset);
-		}
-		translate(v = [0, (-1) * ((lengthTopTube - thickness) / 2), 0]) {
-			lockBracing(diameterTopTube, lengthLock, thickness, offset);
+		difference() {
+			union() {
+				bottomPart1(lengthTopTube, diameterTopTube, lengthLock, diameterLock, screwBarWidth, nutSizeOuter, nutSizeInner, thickness, offset, screwOffsetShare);
+				translate(v = [0, (-1) * (nutSizeOuter + (thickness / 2)), 0]) {
+					doubleStabilityBracing(diameterTopTube, screwBarWidth, thickness, offset);
+				}
+				translate(v = [0, (-1) * (lengthTopTube - (nutSizeOuter + (1.5 * thickness))), 0]) {
+					doubleStabilityBracing(diameterTopTube, screwBarWidth, thickness, offset);
+				}
+				translate(v = [0, (-1) * ((lengthTopTube - thickness) / 2), 0]) {
+					lockBracing(diameterTopTube, lengthLock, thickness, offset);
+				}
+			}
+			translate(v = [((diameterTopTube + diameterLock) / 2)+ thickness, (-1) * (lengthTopTube / 2), (lengthLock - (thickness / 2))]) {
+				carveRoundTube(diameterLock, thickness);
+			}
+			translate(v = [((diameterTopTube + diameterLock) / 2)+ thickness, (-1) * (lengthTopTube / 2), 0]) {
+				rotate(a = [180, 0, 0]) {
+					difference() {
+						translate(v = [0, 0, (-1) * (thickness / 2)]) {
+						carveRoundTube(diameterLock, thickness);
+						}
+						difference() {
+							translate(v = [screwBarWidth - diameterLock, 0, (-1) * thickness / 2]) {
+								cube(size = [diameterLock, diameterLock + (2 * thickness) + 2, thickness + 2], center = true);
+							}
+							translate(v = [0, 0, (-1) * ((thickness + 4) / 2)])
+							cylinder(h = thickness + 4, r = (diameterLock + thickness) / 2);
+						}
+					}
+				}
+			}
 		}
 	}
 }
@@ -290,9 +313,22 @@ translate(v = [0, 0, (-1) * (offset / 2)]) {
 				translate(v = [((diameterTopTube + diameterLock) / 2) + thickness, thickness + (offset / 2) + 1, lengthTopTube / 2]) {
 					rotate(a = [90, 0, 0]) {
 						union() {
-							cylinder(r = diameterLock / 2, h = thickness + 2);
-							translate(v = [diameterLock / 2, 0, (thickness / 2) + 1]) {
-								cube([diameterLock, diameterLock, thickness + 2], true);
+							difference() {
+								carveRing(diameterLock, thickness);
+								translate(v = [0, 0, 0]) {
+									translate(v = [(-1) * ((diameterLock + thickness) / 2), 0, 0]) {
+										cube([thickness, diameterLock + thickness + 2, ((thickness + 2))], true);
+									}
+									translate(v = [(-1) * ((diameterLock + thickness) / 2), (diameterLock + thickness) / 2, 0]) {
+										cube([diameterLock + thickness + 4, thickness, ((thickness + 2))], true);
+									}
+									translate(v = [(-1) * ((diameterLock + thickness) / 2), (-1) * (diameterLock + thickness) / 2, 0]) {
+										cube([diameterLock + thickness + 4, thickness, ((thickness + 2))], true);
+									}
+								}
+							}
+							translate(v = [screwBarWidth, 0, (thickness / 2) + 1]) {
+								cube([diameterLock, diameterLock + thickness + 2, thickness + 4], true);
 							}
 						}
 					}
@@ -359,6 +395,28 @@ module lockBracing(diameterTopTube, lengthLock, thickness, offset) {
 			}
 			translate(v = [0, (-1) * (offset / 2), -1]) {
 				cylinder(r = diameterTopTube / 2, h = thickness + 2);
+			}
+		}
+	}
+}
+
+module carveRoundTube(diameter, thickness) {
+	difference() {
+		cylinder(h = (thickness / 2) + 1, r = ((diameter / 2) + thickness) + 1);
+		rotate_extrude() {
+			translate(v = [((diameter  + thickness) / 2), 0, 0]) {
+				circle(r = (thickness / 2));
+			}
+		}
+	}
+}
+
+module carveRing(diameter, thickness) {
+	difference() {
+		cylinder(h = thickness + 2, r = ((diameter + thickness) / 2));
+		rotate_extrude() {
+			translate(v = [((diameter + thickness) / 2), (thickness / 2) + 1, 0]) {
+				circle(r = (thickness / 2));
 			}
 		}
 	}
