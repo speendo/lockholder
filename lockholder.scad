@@ -291,8 +291,8 @@ translate(v = [0, 0, (-1) * (offset / 2)]) {
 					rotate(a = [90, 0, 0]) {
 						union() {
 							cylinder(r = diameterLock / 2, h = thickness + 2);
-							translate(v = [diameterLock / 2, 0, (thickness / 2) + 1]) {
-								cube([diameterLock, diameterLock, thickness + 2], true);
+							translate(v = [screwBarWidth, 0, (thickness / 2) + 1]) {
+								cube([diameterLock, diameterLock + thickness + 2, thickness + 4], true);
 							}
 						}
 					}
