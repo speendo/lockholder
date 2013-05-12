@@ -3,6 +3,8 @@ $fn=200;
 
 // Imports
 include <lockholder.scad>;
+// include <lockholder_fast_and_easy(v_1_0).scad>;
+// uncomment previous line for faster rendering (by the cost of sharper edges)
 
 lockHolderSet
 (
